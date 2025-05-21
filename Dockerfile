@@ -1,6 +1,6 @@
-# Tailscale v1.82.5
+# Tailscale v1.84.0
 FROM golang:1.24-alpine AS build-env
-ARG VERSION=release-branch/1.82
+ARG VERSION=release-branch/1.84
 WORKDIR /go/src
 ENV GOFLAGS="-tags=ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube,ts_include_cli -buildvcs=false -trimpath"
 RUN apk add --no-cache git
@@ -16,6 +16,8 @@ RUN source /go/src/shellvars && go build -ldflags "-X tailscale.com/version.long
 
 FROM alpine:3.19
 RUN apk add --no-cache ca-certificates iptables iproute2 ip6tables
+RUN rm /sbin/iptables && ln -s /sbin/iptables-legacy /sbin/iptables
+RUN rm /sbin/ip6tables && ln -s /sbin/ip6tables-legacy /sbin/ip6tables
 
 COPY --from=build-env /go/src/tailscale /usr/local/bin/
 COPY --from=build-env /go/src/tailscaled /usr/local/bin/
