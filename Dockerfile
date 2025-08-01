@@ -1,4 +1,4 @@
-# Tailscale v1.86.0
+# Tailscale v1.86.2
 FROM golang:1.24-alpine AS build-env
 ARG VERSION=release-branch/1.86
 WORKDIR /go/src
