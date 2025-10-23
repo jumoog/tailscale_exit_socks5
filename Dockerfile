@@ -6,7 +6,7 @@ ENV GOFLAGS="-tags=ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube,ts_include_
 RUN apk add --no-cache git
 RUN git clone --depth=1 -b ${VERSION} https://github.com/tailscale/tailscale.git . && git checkout ${VERSION}
 COPY . .
-RUN git apply "1-change-default-disable-remote-updates-and-log-upload.patch"
+#RUN git apply "1-change-default-disable-remote-updates-and-log-upload.patch"
 RUN git apply "2-add-option-for-allowed-destinations.patch"
 RUN /go/src/build_dist.sh shellvars > shellvars
 RUN go mod download
