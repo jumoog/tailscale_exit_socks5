@@ -2,7 +2,7 @@
 FROM golang:1.25-alpine AS build-env
 ARG VERSION=release-branch/1.90
 WORKDIR /go/src
-ENV GOFLAGS="-tags=ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube,ts_omit_logtail,ts_omit_usermetrics,ts_omit_clientmetrics,ts_omit_clientupdate,ts_include_cli -buildvcs=false -trimpath"
+ENV GOFLAGS="-tags=ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube,ts_omit_logtail,ts_omit_usermetrics,ts_omit_clientupdate,ts_include_cli -buildvcs=false -trimpath"
 RUN apk add --no-cache git
 RUN git clone --depth=1 -b ${VERSION} https://github.com/tailscale/tailscale.git . && git checkout ${VERSION}
 COPY . .
