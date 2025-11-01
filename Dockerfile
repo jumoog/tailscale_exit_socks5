@@ -2,12 +2,11 @@
 FROM golang:1.25-alpine AS build-env
 ARG VERSION=release-branch/1.90
 WORKDIR /go/src
-ENV GOFLAGS="-tags=ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube,ts_include_cli -buildvcs=false -trimpath"
+ENV GOFLAGS="-tags=ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube,ts_omit_logtail,ts_omit_usermetrics,ts_omit_clientmetrics,ts_omit_clientupdate,ts_include_cli -buildvcs=false -trimpath"
 RUN apk add --no-cache git
 RUN git clone --depth=1 -b ${VERSION} https://github.com/tailscale/tailscale.git . && git checkout ${VERSION}
 COPY . .
-#RUN git apply "1-change-default-disable-remote-updates-and-log-upload.patch"
-RUN git apply "2-add-option-for-allowed-destinations.patch"
+RUN git apply "add-option-for-allowed-destinations.patch"
 RUN /go/src/build_dist.sh shellvars > shellvars
 RUN go mod download
 RUN source /go/src/shellvars && go build -ldflags "-X tailscale.com/version.longStamp=$VERSION_LONG -X tailscale.com/version.shortStamp=$VERSION_SHORT -w -s -buildid=" ./cmd/tailscaled
