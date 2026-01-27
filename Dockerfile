@@ -1,6 +1,6 @@
-# Tailscale v1.92.5
+# Tailscale v1.94.1
 FROM golang:1.25-alpine AS build-env
-ARG VERSION=release-branch/1.92
+ARG VERSION=release-branch/1.94
 WORKDIR /go/src
 ENV GOFLAGS="-tags=ts_omit_aws,ts_omit_bird,ts_omit_tap,ts_omit_kube,ts_omit_logtail,ts_omit_usermetrics,ts_omit_clientupdate,ts_include_cli -buildvcs=false -trimpath"
 RUN apk add --no-cache git
