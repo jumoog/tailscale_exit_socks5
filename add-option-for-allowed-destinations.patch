@@ -1,32 +1,27 @@
-From 2ceeb48c90b547c766e67221c0bbd9c15237cfd0 Mon Sep 17 00:00:00 2001
-From: Kilian von Pflugk <github@jumoog.io>
-Date: Sat, 10 Aug 2024 14:33:05 +0200
-Subject: [PATCH] add option for allowed destinations
-
----
- net/socks5/socks5.go | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
 diff --git a/net/socks5/socks5.go b/net/socks5/socks5.go
-index 0d651537f..640880572 100644
+index f67dc1e..ba83942 100644
 --- a/net/socks5/socks5.go
 +++ b/net/socks5/socks5.go
-@@ -21,9 +21,11 @@
- 	"io"
- 	"log"
- 	"net"
+@@ -13,6 +13,7 @@ package socks5
+ package socks5
+
+ import (
 +	"regexp"
+ 	"bytes"
+ 	"context"
+ 	"encoding/binary"
+@@ -25,6 +26,7 @@ import (
  	"strconv"
  	"time"
- 
+
 +	"tailscale.com/envknob"
  	"tailscale.com/types/logger"
  )
- 
-@@ -183,6 +185,19 @@ func (c *Conn) handleRequest() error {
+
+@@ -191,6 +193,19 @@ func (c *Conn) handleRequest() error {
  		return err
  	}
- 
+
 +	// whitelist destinations
 +	if s := envknob.String("TS_SOCKS_ALLOWED_DESTINATION"); s != "" {
 +		match, _ := regexp.MatchString(s, req.destination.addr)
@@ -43,6 +38,3 @@ index 0d651537f..640880572 100644
  	c.request = req
  	switch req.command {
  	case connect:
--- 
-2.46.0.windows.1
-
