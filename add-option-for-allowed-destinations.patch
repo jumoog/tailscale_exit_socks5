@@ -2,26 +2,15 @@ diff --git a/net/socks5/socks5.go b/net/socks5/socks5.go
 index f67dc1e..ba83942 100644
 --- a/net/socks5/socks5.go
 +++ b/net/socks5/socks5.go
-@@ -13,6 +13,7 @@ package socks5
- package socks5
-
- import (
+@@ -24,2 +24,3 @@
+ 	"net"
 +	"regexp"
- 	"bytes"
- 	"context"
- 	"encoding/binary"
-@@ -25,6 +26,7 @@ import (
- 	"strconv"
- 	"time"
-
+ 	"slices"
+@@ -29,2 +30,3 @@
 +	"tailscale.com/envknob"
+ 	"tailscale.com/syncs"
  	"tailscale.com/types/logger"
- )
-
-@@ -191,6 +193,19 @@ func (c *Conn) handleRequest() error {
- 		return err
- 	}
-
+@@ -213,2 +214,14 @@ func (c *Conn) handleRequest() error {
 +	// whitelist destinations
 +	if s := envknob.String("TS_SOCKS_ALLOWED_DESTINATION"); s != "" {
 +		match, _ := regexp.MatchString(s, req.destination.addr)
@@ -34,7 +23,5 @@ index f67dc1e..ba83942 100644
 +			log.Printf("allow access to: %v on port: %v", req.destination.addr, req.destination.port)
 +		}
 +	}
-+
  	c.request = req
  	switch req.command {
- 	case connect:
